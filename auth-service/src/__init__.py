@@ -1,11 +1,10 @@
 from flask import Flask
+from src.routes.auth import auth_bp
 
 def create_app():
-    """Cria e configura a aplicação Flask."""
     app = Flask(__name__)
 
-    @app.route('/')
-    def home():
-        return {"message": "Auth Service Running!"}
+    # Registrar Blueprint de autenticação
+    app.register_blueprint(auth_bp, url_prefix="/auth")
 
     return app

@@ -1,17 +1,21 @@
-# Usa a imagem oficial do Python
+# Dockerfile
+
 FROM python:3.12
 
-# Define o diretório de trabalho dentro do container
-WORKDIR /src
+# Set working directory
+WORKDIR /app
 
-# Copia os arquivos do auth-service para dentro do container
-COPY . .
+# Copia os arquivos de requisitos
+COPY requirements.txt .
 
 # Instala as dependências
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expõe a porta 5000
-EXPOSE 5000
+# Instala o ulid-py
+RUN pip install ulid-py
 
-# Comando para rodar a aplicação
+# Copia o código para o container
+COPY . .
+
+# Comando para rodar o app
 CMD ["python", "src/main.py"]

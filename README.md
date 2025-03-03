@@ -1,1 +1,1 @@
-# finnexus
+# finnexu

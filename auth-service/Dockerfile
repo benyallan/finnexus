@@ -2,7 +2,7 @@
 FROM python:3.12
 
 # Define o diretório de trabalho dentro do container
-WORKDIR /app
+WORKDIR /src
 
 # Copia os arquivos do auth-service para dentro do container
 COPY . .

@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  auth-service:
+    build: ./auth-service  # Caminho correto para o Dockerfile do auth-service
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./auth-service:/app

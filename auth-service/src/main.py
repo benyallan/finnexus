@@ -1,5 +1,4 @@
-from src.app import create_app
-from flask import Flask, jsonify
+from app import create_app
 
 app = create_app()
 

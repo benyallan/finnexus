@@ -1,20 +1,17 @@
-# Dockerfile
-
+# Usa a imagem oficial do Python 3.12 como base
 FROM python:3.12
 
-# Set working directory
+# Define o diretório de trabalho dentro do contêiner
 WORKDIR /app
 
-# Copia os arquivos de requisitos
-COPY . .
+# Copia apenas o arquivo de dependências primeiro para aproveitar cache de build
+COPY requirements.txt .
 
-# Instala as dependências
-RUN pip install --no-cache-dir -r requirements.txt
+# Instala todas as dependências de uma vez para otimizar camadas
+RUN pip install --no-cache-dir -r requirements.txt ulid-py python-dotenv
 
-# Instala o ulid-py
-RUN pip install ulid-py
+# Copia apenas a pasta src para dentro do contêiner
+COPY src/ src/
 
-RUN pip install python-dotenv
-
-# Comando para rodar o app
-CMD ["python", "src/main.py"]
+# Define o comando padrão ao rodar o contêiner
+ENTRYPOINT ["python", "src/main.py"]

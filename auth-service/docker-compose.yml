@@ -4,13 +4,14 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - .:/app
+      - ./src:/app/src
     environment:
       - FLASK_ENV=development
       - DATABASE_URL=${DATABASE_URL}
       - SECRET_KEY=${SECRET_KEY}
     depends_on:
-      - mysql-db
+      mysql-db:
+        condition: service_healthy
 
   mysql-db:
     image: mysql:8
@@ -24,6 +25,10 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
 
 volumes:
   mysql_data:

@@ -3,10 +3,10 @@
 FROM python:3.12
 
 # Set working directory
-WORKDIR /src
+WORKDIR /app
 
 # Copia os arquivos de requisitos
-COPY requirements.txt .
+COPY . .
 
 # Instala as dependências
 RUN pip install --no-cache-dir -r requirements.txt
@@ -15,9 +15,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install ulid-py
 
 RUN pip install python-dotenv
-
-# Copia o código para o container
-COPY . .
 
 # Comando para rodar o app
 CMD ["python", "src/main.py"]

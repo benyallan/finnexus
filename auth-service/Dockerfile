@@ -1,17 +1,23 @@
-# Usa a imagem oficial do Python 3.12 como base
+# Usa a imagem oficial do Python 3.12 (não-slim)
 FROM python:3.12
 
-# Define o diretório de trabalho dentro do contêiner
+# Define o diretório de trabalho
 WORKDIR /app
 
-# Copia apenas o arquivo de dependências primeiro para aproveitar cache de build
+# Instala dependências do sistema necessárias para o mysqlclient
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    pkg-config \
+    libmariadb-dev \
+    libmariadb-dev-compat \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instala dependências Python
 COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Instala todas as dependências de uma vez para otimizar camadas
-RUN pip install --no-cache-dir -r requirements.txt ulid-py python-dotenv
-
-# Copia apenas a pasta src para dentro do contêiner
-COPY src/ src/
-
-# Define o comando padrão ao rodar o contêiner
-ENTRYPOINT ["python", "src/main.py"]
+# Restante do Dockerfile (cópia do código, etc.)
+COPY src/ ./src
+ENV FLASK_ENV=development
+ENV FLASK_APP=src/main.py
+EXPOSE 5000
+CMD ["flask", "run", "--host=0.0.0.0"]
